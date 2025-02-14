@@ -29,18 +29,6 @@
       "name": "Júpiter",
       "type": "Planeta",
       "distanceFromSun": "778.5 millones de km"
-    },
-    {
-      "id": "e394",
-      "name": "Nuevo",
-      "type": "Planeta",
-      "distanceFromSun": "56789"
-    },
-    {
-      "id": "81a1",
-      "name": "el azul",
-      "type": "planeta",
-      "distanceFromSun": "6789"
     }
   ]
 }
