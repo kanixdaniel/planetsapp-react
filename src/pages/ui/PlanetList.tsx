@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const PlanetList = ({ planets }: Props) => {
+    const [isPending, startTransition] = useTransition();
     const [optimisticPlanets, setOptimisticPlanets] = useOptimistic(
         planets,
         (currentValue, newPlanet: Planet) => {
@@ -19,9 +20,20 @@ export const PlanetList = ({ planets }: Props) => {
     );
 
     const handleUpdatePlanet = async (planet: Planet) => {
-        planet.name = planet.name.toUpperCase();
-        setOptimisticPlanets(planet);
-        const updatedPLanet = await updatePlanetAction(planet);
+        const data = {
+            ...planet,
+            name: planet.name.toUpperCase()
+        }
+
+        startTransition( async () => {
+            try {
+                setOptimisticPlanets(data);
+                const updatedPLanet = await updatePlanetAction(planet);
+                setOptimisticPlanets(updatedPLanet);
+            } catch (error) {
+                setOptimisticPlanets(planet)
+            }
+        });
     }
 
     return (
@@ -33,8 +45,9 @@ export const PlanetList = ({ planets }: Props) => {
                     <p className="text-gray-700">{planet.distanceFromSun}</p>
                     <br />
                     <button
-                        className="bg-blue-500 text-white p-2 rounded w-full"
+                        className="bg-blue-500 disabled:bg-gray-500 text-white p-2 rounded w-full"
                         onClick={() => handleUpdatePlanet(planet)}
+                        disabled={isPending}
                     >
                         Actualizar
                     </button>
